@@ -8,21 +8,43 @@ interface Props {
 
 }
 
+interface Restaurant {
+    restaurant: {
+        name: string
+    }
+}
+
 const App: FC<Props> = (): ReactElement => {
-    const [location, setLocation] = useState<GeolocationPosition>()
+    const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
+
+    const getRandomArrayElement = <T,>(array: T[]): T => {
+        return array[Math.floor(Math.random() * array.length)]
+    }
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition((geolocation) => {
-            setLocation(geolocation)
-            axios.get("http://localhost:8080/key").then((res) => {
+            const params = {
+                lat: geolocation.coords.latitude,
+                lon: geolocation.coords.longitude
+            }
+            axios.post("http://localhost:8080/get/geocode", params).then((res) => {
                 console.log(res.data)
+                setNearbyRestaurants(res.data.nearby_restaurants)
             })
         })
     }, [])
 
     return (
         <Container>
-            {location?.coords.latitude}
+            {
+                nearbyRestaurants.map((restaurant: Restaurant) => {
+                    return (
+                        <div>
+                            {restaurant.restaurant.name}
+                        </div>
+                    )
+                })
+            }
         </Container>
     )
 }
