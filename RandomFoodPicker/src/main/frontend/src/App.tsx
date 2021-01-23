@@ -1,50 +1,37 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {FC, ReactElement} from 'react';
 import {Container} from 'react-bootstrap';
 import './App.sass';
-import axios from "axios";
+import googleMapsApi from "./shared/functions/GoogleMapsApi";
 
 interface Props {
 
 }
 
-interface Restaurant {
-    restaurant: {
-        name: string
-    }
-}
-
 const App: FC<Props> = (): ReactElement => {
-    const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
-
-    const getRandomArrayElement = <T,>(array: T[]): T => {
-        return array[Math.floor(Math.random() * array.length)]
-    }
-
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition((geolocation) => {
+        const baseUrl = "https://maps.googleapis.com/maps/api/place/"
+        const params = {
+            input: "Marsden Park",
+            inputtype: "textquery"
+        }
+        googleMapsApi.textsearch(baseUrl, params).then((res) => {
+            return res.results[0].geometry.location
+        }).then((location) => {
             const params = {
-                lat: geolocation.coords.latitude,
-                lon: geolocation.coords.longitude
+                location: location.lat + "," + location.lng,
+                radius: 10000,
+                type: "restaurant"
             }
-            axios.post("http://localhost:8080/get/geocode", params).then((res) => {
-                console.log(res.data)
-                setNearbyRestaurants(res.data.nearby_restaurants)
-            })
+            return googleMapsApi.nearbysearch(baseUrl, params)
+        }).then((res) => {
+            console.log(res.results)
         })
     }, [])
 
     return (
         <Container>
-            {
-                nearbyRestaurants.map((restaurant: Restaurant) => {
-                    return (
-                        <div>
-                            {restaurant.restaurant.name}
-                        </div>
-                    )
-                })
-            }
+            Hello, world!
         </Container>
     )
 }
