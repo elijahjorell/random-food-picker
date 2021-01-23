@@ -20,12 +20,20 @@ const App: FC<Props> = (): ReactElement => {
         }).then((location) => {
             const params = {
                 location: location.lat + "," + location.lng,
-                radius: 10000,
+                radius: 20000,
                 type: "restaurant"
             }
             return googleMapsApi.nearbysearch(baseUrl, params)
-        }).then((res) => {
-            console.log(res.results)
+        }).then((nearbySearch) => {
+            console.log(nearbySearch.results)
+            return nearbySearch.next_page_token
+        }).then((pageToken) => {
+            const params = {
+                pagetoken: pageToken
+            }
+            setTimeout((): void => {
+                googleMapsApi.nearbysearch(baseUrl, params).then((nearbySearch) => console.log(nearbySearch))
+            }, 1500)
         })
     }, [])
 
