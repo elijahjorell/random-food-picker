@@ -8,26 +8,30 @@ function App() {
   useEffect(() => {
     GMap.findPlaceFromText("Marsden Park").then((res) => {
       console.log("findplacefromtext:");
-      console.log(res.data);
+      console.log(res);
     });
-    GMap.nearbySearch(-33.702382, 150.835362, 500).then((res) => {
+    GMap.nearbySearch(-33.702382, 150.835362, 20000, "restaurant").then((res) => {
       console.log("nearbysearch:");
-      console.log(res.data);
+      console.log(res);
+      setData(res.results["0"]);
     });
     GMap.textsearch("Marsden Park KFC").then((res) => {
       console.log("textsearch:");
-      console.log(res.data);
+      console.log(res);
     })
-
   }, []);
 
   return (
     <div className="App">
       {
         data === undefined ? (
-            <h1>Loading...</h1>
+            <h1>Let's eat around...</h1>
         ) : (
-            <h1>Loaded</h1>
+            <div>
+              <h1>Let's eat at...</h1>
+              <h1>{data["name"]}</h1>
+              <h4>({data["vicinity"]})</h4>
+            </div>
         )
       }
     </div>

@@ -22,12 +22,13 @@ const GMap = {
         };
         return GMap.sendRequestToBackend(url, params);
     },
-    nearbySearch: (lat, lon, radius) => {
+    nearbySearch: (lat, lon, radius, type=null) => {
         const url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
         const params = {
             location: lat + "," + lon,
             radius: radius
         };
+        if (type) params["type"] = type;
         return GMap.sendRequestToBackend(url, params);
     },
     textsearch: (query) => {
