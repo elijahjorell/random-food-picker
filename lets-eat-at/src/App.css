@@ -30,6 +30,10 @@ a:hover {
   background: #3f51b5;
 }
 
+.light-grey {
+  color: lightgrey;
+}
+
 .clickable:hover {
   cursor: pointer;
 }

@@ -21,7 +21,7 @@ function App() {
         GMap.textsearch(suburb + " " + ipData.data.region + " " + ipData.data.country).then((searchData) => {
           return searchData.results["0"]["geometry"]["location"];
         }).then((location) => {
-          GMap.nearbySearch(location["lat"], location["lng"], 5000, "restaurant").then((nearbyData) => {
+          GMap.nearbySearch(location["lat"], location["lng"], 3000, "restaurant").then((nearbyData) => {
             setData(Misc.getRandomElementFromArray(Object.values(nearbyData.results)));
           });
         })
@@ -95,6 +95,9 @@ function App() {
                   {data["vicinity"]}
                 </div>
               </Button>
+              <div className="light-grey">
+                (Click above to go to Google Maps)
+              </div>
             </div>
             <Button fullWidth variant="contained" onClick={handleReset}>Reset</Button>
           </div>
