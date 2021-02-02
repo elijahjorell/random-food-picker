@@ -26,7 +26,8 @@ const GMap = {
         const url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
         const params = {
             location: lat + "," + lon,
-            radius: radius
+            radius: radius,
+            opennow: true
         };
         if (type) params["type"] = type;
         return GMap.sendRequestToBackend(url, params);
