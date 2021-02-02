@@ -1,2 +1,2 @@
 # random-food-picker
-For when you can't decide what to eat for dinner
+For when you're overwhelmed by the responsibility of choosing where to eat
