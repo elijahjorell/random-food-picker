@@ -38,6 +38,9 @@ const GMap = {
             query: query
         };
         return GMap.sendRequestToBackend(url, params);
+    },
+    createUrl: (arr) => {
+        return encodeURIComponent(arr.join(', '));
     }
 }
 

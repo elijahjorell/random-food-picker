@@ -1,8 +1,8 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import {useEffect, useState} from "react";
 import GMap from "./GMap";
 import {Form, Spinner} from "react-bootstrap";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 import {Button, TextField} from "@material-ui/core";
 import Misc from "./Misc";
@@ -32,6 +32,8 @@ function App() {
   const handleReset = () => {
     setSubmitted(false);
     setData(undefined);
+    setSuburb("");
+    setDisabled(true);
   }
 
   const handleOnFocus = (event) => {
@@ -51,32 +53,51 @@ function App() {
     }
   }
 
+  const buttonCardStyle = {
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "red"
+  }
+
   return (
     <div className="App">
       {
         data === undefined ? (
-            <div>
-              <h2>Let's eat around...</h2>
-              {
-                !submitted ? (
-                  <div>
+          <div>
+            {
+              !submitted ? (
+                <div>
+                  <h2>Let's eat somewhere around...</h2>
+                  <div className="card">
                     <Form onSubmit={handleSubmit}>
                       <TextField placeholder="Enter suburb" fullWidth inputProps={{ style: { textAlign: "center", fontSize: "2.0rem", textTransform: "capitalize"}}} onChange={handleOnChange} onFocus={handleOnFocus} onBlur={handleOnBlur}/>
                     </Form>
                     <Button variant="contained" disabled={disabled} color={"primary"} onClick={handleSubmit}>Go</Button>
                   </div>
-                ) : (
-                  <Spinner animation="border"/>
-                )
-              }
-            </div>
+                </div>
+              ) : (
+                <div>
+                  <h2>Let's eat at...</h2>
+                  <div className="loading">
+                    <Spinner animation="border"/>
+                  </div>
+                </div>
+              )
+            }
+          </div>
         ) : (
-            <div>
-              <h2>Let's eat at</h2>
-              <h1>{data["name"]}</h1>
-              <h4>({data["vicinity"]})</h4>
-              <Button variant="contained" onClick={handleReset}>Reset</Button>
+          <div>
+            <h2>Let's eat at</h2>
+            <div className="card">
+              <Button variant="contained" color="primary" inputProps={{ style: buttonCardStyle }} href={"https://www.google.com/maps/search/?api=1&query=" + GMap.createUrl([data["name"], data["vicinity"]])}>
+                <div className="result-content">
+                  <h1>{data["name"]}</h1>
+                  {data["vicinity"]}
+                </div>
+              </Button>
             </div>
+            <Button fullWidth variant="contained" onClick={handleReset}>Reset</Button>
+          </div>
         )
       }
     </div>

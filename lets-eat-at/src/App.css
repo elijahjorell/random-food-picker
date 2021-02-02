@@ -1,12 +1,37 @@
 .App {
   text-align: center;
   max-width: 700px;
-  margin: 20vh auto auto;
+  margin: 17.5vh auto auto;
   padding: 10px;
 }
 
-h1, h2, h4 {
+.card {
+  border: none;
+  margin-top: 50px;
   margin-bottom: 50px;
+  border-radius: 25px;
+  color: white;
+}
+
+a:hover {
+  color: inherit;
+}
+
+.result-content {
+  padding: 25px;
+  text-transform: uppercase;
+}
+
+.loading {
+  margin-top: 80px;
+}
+
+.purple {
+  background: #3f51b5;
+}
+
+.clickable:hover {
+  cursor: pointer;
 }
 
 Form {
