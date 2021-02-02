@@ -1,2 +1,2 @@
 # random-food-picker
-For when you're overwhelmed by the responsibility of choosing where to eat
+For when choosing where to eat is too much
