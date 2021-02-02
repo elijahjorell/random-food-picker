@@ -87,9 +87,9 @@ function App() {
           </div>
         ) : (
           <div>
-            <h2>Let's eat at</h2>
+            <h2>Let's eat at...</h2>
             <div className="card">
-              <Button variant="contained" color="primary" inputProps={{ style: buttonCardStyle }} href={"https://www.google.com/maps/search/?api=1&query=" + GMap.createUrl([data["name"], data["vicinity"]])}>
+              <Button variant="contained" color="primary" inputProps={{ style: buttonCardStyle }} target="_blank" href={"https://www.google.com/maps/search/?api=1&query=" + GMap.createUrl([data["name"], data["vicinity"]])}>
                 <div className="result-content">
                   <h1>{data["name"]}</h1>
                   {data["vicinity"]}
