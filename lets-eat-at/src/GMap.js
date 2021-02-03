@@ -26,10 +26,16 @@ const GMap = {
         const url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
         const params = {
             location: lat + "," + lon,
-            radius: radius,
-            opennow: true
+            rankby: "distance"
         };
         if (type) params["type"] = type;
+        return GMap.sendRequestToBackend(url, params);
+    },
+    nearbySearchNextPage: (nextPageToken) => {
+        const url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
+        const params = {
+            pagetoken: nextPageToken
+        };
         return GMap.sendRequestToBackend(url, params);
     },
     textsearch: (query) => {
