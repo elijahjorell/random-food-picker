@@ -22,7 +22,7 @@ const GMap = {
         };
         return GMap.sendRequestToBackend(url, params);
     },
-    nearbySearch: (lat, lon, radius, type=null) => {
+    nearbySearch: (lat, lon, type=null) => {
         const url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
         const params = {
             location: lat + "," + lon,
@@ -38,11 +38,12 @@ const GMap = {
         };
         return GMap.sendRequestToBackend(url, params);
     },
-    textsearch: (query) => {
+    textsearch: (query, lat=null, lon=null) => {
         const url = "https://maps.googleapis.com/maps/api/place/textsearch/json";
         const params = {
             query: query
         };
+        if (lat && lon) params["location"] = lat + "," + lon;
         return GMap.sendRequestToBackend(url, params);
     },
     createUrl: (arr) => {

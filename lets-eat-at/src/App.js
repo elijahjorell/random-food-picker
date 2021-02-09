@@ -1,11 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import GMap from "./GMap";
 import {Form, Spinner} from "react-bootstrap";
-import axios from "axios";
 import {Button, TextField} from "@material-ui/core";
 import CasinoIcon from '@material-ui/icons/Casino';
+import RoomIcon from '@material-ui/icons/Room';
+import CheckIcon from '@material-ui/icons/Check';
 import Misc from "./Misc";
 
 function App() {
@@ -14,21 +15,26 @@ function App() {
   const [submitted, setSubmitted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [disabled, setDisabled] = useState(true);
+  const [geolocation, setGeolocation] = useState();
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((geolocation) => {
+      setGeolocation(geolocation);
+    })
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!disabled) {
       setSubmitted(true);
-      axios.get("http://ip-api.com/json").then((ipData) => {
-        GMap.textsearch(searchQuery + " " + ipData.data.region + " " + ipData.data.country).then((searchData) => {
-          return searchData.results["0"]["geometry"]["location"];
-        }).then((foundLocation) => {
-          GMap.nearbySearch(foundLocation["lat"], foundLocation["lng"], 3000, "restaurant").then((nearbyData) => {
-            setNearbyData(nearbyData);
-            setSelectedPlace(Misc.getRandomElementFromArray(Object.values(nearbyData.results)));
-          });
-        })
-      });
+      GMap.textsearch(searchQuery, geolocation.coords.latitude, geolocation.coords.longitude).then((searchData) => {
+        return searchData.results["0"]["geometry"]["location"];
+      }).then((foundLocation) => {
+        GMap.nearbySearch(foundLocation["lat"], foundLocation["lng"], "restaurant").then((nearbyData) => {
+          setNearbyData(nearbyData);
+          setSelectedPlace(Misc.getRandomElementFromArray(Object.values(nearbyData.results)));
+        });
+      })
     }
   }
 
@@ -71,6 +77,9 @@ function App() {
 
   return (
     <div className="App">
+      <div className="location-text">
+        {}
+      </div>
       {
         selectedPlace === undefined ? (
           <div>
@@ -84,6 +93,17 @@ function App() {
                     </Form>
                     <Button variant="contained" disabled={disabled} color={"primary"} onClick={handleSubmit}>Go</Button>
                   </div>
+                  {
+                    geolocation ? (
+                        <div>
+                          <RoomIcon/><CheckIcon style={{marginRight: "5px"}}/>
+                        </div>
+                    ) : (
+                        <div>
+                          Location not provided, add country to query for a more accurate search.
+                        </div>
+                    )
+                  }
                 </div>
               ) : (
                 <div>

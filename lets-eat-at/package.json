@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "react-scripts build && aws s3 rm s3://letseatat.com/ --recursive && aws s3 cp ./build s3://letseatat.com/ --recursive --acl public-read"
+    "deploy": "react-scripts build && aws s3 rm s3://letseatat.app/ --recursive && aws s3 cp ./build s3://letseatat.app/ --recursive --acl public-read",
+    "deploy-old": "react-scripts build && aws s3 rm s3://letseatat.com/ --recursive && aws s3 cp ./build s3://letseatat.com/ --recursive --acl public-read"
   },
   "eslintConfig": {
     "extends": [
