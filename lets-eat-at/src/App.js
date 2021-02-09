@@ -16,12 +16,21 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [geolocation, setGeolocation] = useState();
+  const [placeholderText, setPlaceholderText] = useState("");
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((geolocation) => {
       setGeolocation(geolocation);
     })
   }, []);
+
+  useEffect(() => {
+    updatePlaceholderText();
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener("resize", updatePlaceholderText);
+  })
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -52,12 +61,20 @@ function App() {
     setDisabled(true);
   }
 
+  const updatePlaceholderText = () => {
+    if (window.innerWidth < 610) {
+      setPlaceholderText("Enter Location");
+    } else {
+      setPlaceholderText("Enter address, building name or suburb");
+    }
+  }
+
   const handleOnFocus = (event) => {
     event.target.placeholder = "";
   }
 
   const handleOnBlur = (event) => {
-    event.target.placeholder = "Enter address, building name or suburb";
+    event.target.placeholder = placeholderText;
   }
 
   const handleOnChange = (event) => {
@@ -89,7 +106,7 @@ function App() {
                   <h2>Let's eat somewhere around...</h2>
                   <div className="card">
                     <Form onSubmit={handleSubmit}>
-                      <TextField placeholder="Enter address, building name or suburb" fullWidth inputProps={{ style: { textAlign: "center", fontSize: "2.0rem" }}} onChange={handleOnChange} onFocus={handleOnFocus} onBlur={handleOnBlur}/>
+                      <TextField placeholder={placeholderText} fullWidth inputProps={{ style: { textAlign: "center", fontSize: "2.0rem" }}} onChange={handleOnChange} onFocus={handleOnFocus} onBlur={handleOnBlur}/>
                     </Form>
                     <Button variant="contained" disabled={disabled} color={"primary"} onClick={handleSubmit}>Go</Button>
                   </div>
