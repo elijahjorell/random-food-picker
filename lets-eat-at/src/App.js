@@ -5,8 +5,6 @@ import GMap from "./GMap";
 import {Form, Spinner} from "react-bootstrap";
 import {Button, TextField} from "@material-ui/core";
 import CasinoIcon from '@material-ui/icons/Casino';
-import RoomIcon from '@material-ui/icons/Room';
-import CheckIcon from '@material-ui/icons/Check';
 import Misc from "./Misc";
 
 function App() {
@@ -17,12 +15,14 @@ function App() {
   const [disabled, setDisabled] = useState(true);
   const [geolocation, setGeolocation] = useState();
   const [placeholderText, setPlaceholderText] = useState("");
+  const [displayLocationMessage, setDisplayLocationMessage] = useState(false);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((geolocation) => {
       setGeolocation(geolocation);
+      if (!geolocation) setDisplayLocationMessage(true);
     })
-  }, []);
+  }, [displayLocationMessage]);
 
   useEffect(() => {
     updatePlaceholderText();
@@ -111,14 +111,12 @@ function App() {
                     <Button variant="contained" disabled={disabled} color={"primary"} onClick={handleSubmit}>Go</Button>
                   </div>
                   {
-                    geolocation ? (
-                        <div>
-                          <RoomIcon/><CheckIcon style={{marginRight: "5px"}}/>
-                        </div>
-                    ) : (
+                    displayLocationMessage ? (
                         <div>
                           Location not provided, add country to query for a more accurate search.
                         </div>
+                    ) : (
+                        <div />
                     )
                   }
                 </div>
